@@ -41,7 +41,12 @@ class PyEmbedPattern(Pattern):
     def handleMatch(self, m):
         url = m.group(4)
         (max_width, max_height) = self.__parse_params(m.group(3))
-        html = self.pyembed.embed(url, max_width, max_height)
+
+        try:
+            html = self.pyembed.embed(url, max_width, max_height)
+        except Exception, e:
+            html = "<iframe width='"+str(max_width)+"' height='" +str(max_height)+ "' src='" + url + "' frameborder='0'""></iframe>"
+        
         return self.md.htmlStash.store(html)
 
     def __parse_params(self, query_string):
